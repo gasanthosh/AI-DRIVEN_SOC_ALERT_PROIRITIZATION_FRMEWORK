@@ -1,0 +1,157 @@
+2026-03-18 12:38:25,990 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv …
+2026-03-18 12:38:28,235 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv …
+2026-03-18 12:38:30,784 [DATA_PIPELINE] Loading Friday-WorkingHours-Morning.pcap_ISCX.csv …
+2026-03-18 12:38:32,704 [DATA_PIPELINE] Loading Monday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:38:38,513 [DATA_PIPELINE] Loading Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv …
+2026-03-18 12:38:40,651 [DATA_PIPELINE] Loading Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv …
+2026-03-18 12:38:42,006 [DATA_PIPELINE] Loading Tuesday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:38:46,408 [DATA_PIPELINE] Loading Wednesday-workingHours.pcap_ISCX.csv …
+2026-03-18 12:38:53,020 [DATA_PIPELINE] Combined shape before cleaning: (100000, 79)
+2026-03-18 12:38:53,464 [DATA_PIPELINE] Dropped 0 rows with unfillable NaN
+2026-03-18 12:38:53,621 [DATA_PIPELINE] Dropped constant columns: ['Bwd PSH Flags', 'Bwd URG Flags', 'Fwd Avg Bytes/Bulk', 'Fwd Avg Packets/Bulk', 'Fwd Avg Bulk Rate', 'Bwd Avg Bytes/Bulk', 'Bwd Avg Packets/Bulk', 'Bwd Avg Bulk Rate']
+2026-03-18 12:38:53,622 [DATA_PIPELINE] Shape after cleaning: (100000, 71)
+2026-03-18 12:38:53,744 [DATA_PIPELINE] Class distribution:
+Label
+0     80629
+2      7207
+9      7010
+4      4136
+7       231
+10      168
+3       143
+1       120
+11      112
+6       100
+5        89
+13       51
+12        3
+8         1
+Name: count, dtype: int64
+2026-03-18 12:39:10,152 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv …
+2026-03-18 12:39:11,851 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv …
+2026-03-18 12:39:13,699 [DATA_PIPELINE] Loading Friday-WorkingHours-Morning.pcap_ISCX.csv …
+2026-03-18 12:39:15,344 [DATA_PIPELINE] Loading Monday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:39:20,063 [DATA_PIPELINE] Loading Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv …
+2026-03-18 12:39:22,564 [DATA_PIPELINE] Loading Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv …
+2026-03-18 12:39:24,260 [DATA_PIPELINE] Loading Tuesday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:39:29,272 [DATA_PIPELINE] Loading Wednesday-workingHours.pcap_ISCX.csv …
+2026-03-18 12:39:35,258 [DATA_PIPELINE] Combined shape before cleaning: (50000, 79)
+2026-03-18 12:39:35,676 [DATA_PIPELINE] Dropped 0 rows with unfillable NaN
+2026-03-18 12:39:35,771 [DATA_PIPELINE] Dropped constant columns: ['Bwd PSH Flags', 'Bwd URG Flags', 'Fwd Avg Bytes/Bulk', 'Fwd Avg Packets/Bulk', 'Fwd Avg Bulk Rate', 'Bwd Avg Bytes/Bulk', 'Bwd Avg Packets/Bulk', 'Bwd Avg Bulk Rate']
+2026-03-18 12:39:35,771 [DATA_PIPELINE] Shape after cleaning: (50000, 71)
+2026-03-18 12:39:35,811 [DATA_PIPELINE] Class distribution:
+Label
+0     40268
+2      3613
+8      3528
+4      2088
+7       107
+9        85
+3        71
+1        62
+6        55
+10       51
+5        46
+12       25
+11        1
+Name: count, dtype: int64
+2026-03-18 12:40:09,716 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv …
+2026-03-18 12:40:11,684 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv …
+2026-03-18 12:40:13,438 [DATA_PIPELINE] Loading Friday-WorkingHours-Morning.pcap_ISCX.csv …
+2026-03-18 12:40:14,804 [DATA_PIPELINE] Loading Monday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:40:19,071 [DATA_PIPELINE] Loading Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv …
+2026-03-18 12:40:21,534 [DATA_PIPELINE] Loading Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv …
+2026-03-18 12:40:23,166 [DATA_PIPELINE] Loading Tuesday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:40:27,344 [DATA_PIPELINE] Loading Wednesday-workingHours.pcap_ISCX.csv …
+2026-03-18 12:40:33,900 [DATA_PIPELINE] Combined shape before cleaning: (50000, 79)
+2026-03-18 12:40:34,194 [DATA_PIPELINE] Dropped 0 rows with unfillable NaN
+2026-03-18 12:40:34,261 [DATA_PIPELINE] Dropped constant columns: ['Bwd PSH Flags', 'Bwd URG Flags', 'Fwd Avg Bytes/Bulk', 'Fwd Avg Packets/Bulk', 'Fwd Avg Bulk Rate', 'Bwd Avg Bytes/Bulk', 'Bwd Avg Packets/Bulk', 'Bwd Avg Bulk Rate']
+2026-03-18 12:40:34,261 [DATA_PIPELINE] Shape after cleaning: (50000, 71)
+2026-03-18 12:40:34,292 [DATA_PIPELINE] Class distribution before filtering:
+Label
+0     40268
+2      3613
+8      3528
+4      2088
+7       107
+9        85
+3        71
+1        62
+6        55
+10       51
+5        46
+12       25
+11        1
+Name: count, dtype: int64
+2026-03-18 12:40:34,293 [DATA_PIPELINE] Dropping rare classes with < 2 samples: [11]
+2026-03-18 12:40:34,518 [DATA_PIPELINE] Train: (39999, 70)  Test: (10000, 70)
+2026-03-18 12:40:34,518 [DATA_PIPELINE] Pipeline complete — all artifacts saved to models/
+2026-03-18 12:40:37,163 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv …
+2026-03-18 12:40:38,875 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv …
+2026-03-18 12:40:40,625 [DATA_PIPELINE] Loading Friday-WorkingHours-Morning.pcap_ISCX.csv …
+2026-03-18 12:40:42,072 [DATA_PIPELINE] Loading Monday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:40:46,394 [DATA_PIPELINE] Loading Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv …
+2026-03-18 12:40:48,487 [DATA_PIPELINE] Loading Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv …
+2026-03-18 12:40:49,820 [DATA_PIPELINE] Loading Tuesday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:40:53,198 [DATA_PIPELINE] Loading Wednesday-workingHours.pcap_ISCX.csv …
+2026-03-18 12:40:59,685 [DATA_PIPELINE] Combined shape before cleaning: (50000, 79)
+2026-03-18 12:40:59,999 [DATA_PIPELINE] Dropped 0 rows with unfillable NaN
+2026-03-18 12:41:00,089 [DATA_PIPELINE] Dropped constant columns: ['Bwd PSH Flags', 'Bwd URG Flags', 'Fwd Avg Bytes/Bulk', 'Fwd Avg Packets/Bulk', 'Fwd Avg Bulk Rate', 'Bwd Avg Bytes/Bulk', 'Bwd Avg Packets/Bulk', 'Bwd Avg Bulk Rate']
+2026-03-18 12:41:00,089 [DATA_PIPELINE] Shape after cleaning: (50000, 71)
+2026-03-18 12:41:00,120 [DATA_PIPELINE] Class distribution before filtering:
+Label
+0     40268
+2      3613
+8      3528
+4      2088
+7       107
+9        85
+3        71
+1        62
+6        55
+10       51
+5        46
+12       25
+11        1
+Name: count, dtype: int64
+2026-03-18 12:41:00,122 [DATA_PIPELINE] Dropping rare classes with < 2 samples: [11]
+2026-03-18 12:41:00,321 [DATA_PIPELINE] Train: (39999, 70)  Test: (10000, 70)
+2026-03-18 12:41:00,321 [DATA_PIPELINE] Pipeline complete — all artifacts saved to models/
+2026-03-18 12:42:04,605 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv …
+2026-03-18 12:42:06,273 [DATA_PIPELINE] Loading Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv …
+2026-03-18 12:42:08,065 [DATA_PIPELINE] Loading Friday-WorkingHours-Morning.pcap_ISCX.csv …
+2026-03-18 12:42:09,429 [DATA_PIPELINE] Loading Monday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:42:13,559 [DATA_PIPELINE] Loading Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv …
+2026-03-18 12:42:15,582 [DATA_PIPELINE] Loading Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv …
+2026-03-18 12:42:17,225 [DATA_PIPELINE] Loading Tuesday-WorkingHours.pcap_ISCX.csv …
+2026-03-18 12:42:21,508 [DATA_PIPELINE] Loading Wednesday-workingHours.pcap_ISCX.csv …
+2026-03-18 12:42:27,952 [DATA_PIPELINE] Combined shape before cleaning: (50000, 79)
+2026-03-18 12:42:28,212 [DATA_PIPELINE] Dropped 0 rows with unfillable NaN
+2026-03-18 12:42:28,278 [DATA_PIPELINE] Dropped constant columns: ['Bwd PSH Flags', 'Bwd URG Flags', 'Fwd Avg Bytes/Bulk', 'Fwd Avg Packets/Bulk', 'Fwd Avg Bulk Rate', 'Bwd Avg Bytes/Bulk', 'Bwd Avg Packets/Bulk', 'Bwd Avg Bulk Rate']
+2026-03-18 12:42:28,279 [DATA_PIPELINE] Shape after cleaning: (50000, 71)
+2026-03-18 12:42:28,312 [DATA_PIPELINE] Class distribution before filtering:
+Label
+0     40268
+2      3613
+8      3528
+4      2088
+7       107
+9        85
+3        71
+1        62
+6        55
+10       51
+5        46
+12       25
+11        1
+Name: count, dtype: int64
+2026-03-18 12:42:28,312 [DATA_PIPELINE] Dropping rare classes with < 2 samples: [11]
+2026-03-18 12:42:28,344 [DATA_PIPELINE] Final Classes: {0: '0', 1: '1', 2: '10', 3: '12', 4: '2', 5: '3', 6: '4', 7: '5', 8: '6', 9: '7', 10: '8', 11: '9'}
+2026-03-18 12:42:28,547 [DATA_PIPELINE] Train: (39999, 70)  Test: (10000, 70)
+2026-03-18 12:42:28,547 [DATA_PIPELINE] Pipeline complete — all artifacts saved to models/
+2026-03-18 13:01:53,328 [DATA_PIPELINE] Model artifacts loaded successfully.
+2026-03-18 13:02:48,079 [DATA_PIPELINE] Model artifacts loaded successfully.
+2026-03-18 13:03:50,582 [DATA_PIPELINE] Model artifacts loaded successfully.
+2026-03-18 13:10:46,215 [DATA_PIPELINE] Model artifacts loaded successfully.
+2026-03-18 13:26:29,915 [DATA_PIPELINE] Model artifacts loaded successfully.
+2026-03-18 13:35:56,842 [DATA_PIPELINE] Model artifacts loaded successfully.

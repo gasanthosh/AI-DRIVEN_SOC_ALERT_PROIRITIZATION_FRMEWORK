@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOC·AI — Alert Prioritization Dashboard</title>
+  <meta name="description" content="AI-Driven Security Operations Center — Real-time alert prioritization, live network scanning, and false-positive reduction." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <!-- ── Toast Container ──────────────────────────────────────────────── -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ── Alert Detail Modal ───────────────────────────────────────────── -->
+  <div id="alert-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Alert Details</h3>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <span class="brand-icon">🛡️</span>
+        <span class="brand-name">SOC<span class="brand-ai">·AI</span></span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-tab="dashboard" id="nav-dashboard">
+        <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-tab="alerts" id="nav-alerts">
+        <span class="nav-icon">🚨</span><span class="nav-label">Alerts</span>
+        <span class="nav-badge" id="alert-badge">0</span>
+      </a>
+      <a href="#" class="nav-item" data-tab="metrics" id="nav-metrics">
+        <span class="nav-icon">📈</span><span class="nav-label">Metrics</span>
+      </a>
+      <a href="#" class="nav-item" data-tab="monitor" id="nav-monitor">
+        <span class="nav-icon">📡</span><span class="nav-label">Live Monitor</span>
+        <span class="nav-pulse" id="nav-pulse" style="display:none"></span>
+      </a>
+      <a href="#" class="nav-item" data-tab="simulate" id="nav-simulate">
+        <span class="nav-icon">📶</span><span class="nav-label">Traffic</span>
+      </a>
+      <a href="#" class="nav-item" data-tab="analytics" id="nav-analytics">
+        <span class="nav-icon">🧬</span><span class="nav-label">Analytics</span>
+      </a>
+    </nav>
+
+    <!-- Filter Panel -->
+    <div class="filter-panel">
+      <p class="filter-title">FILTER SEVERITY</p>
+      <label class="filter-check">
+        <input type="checkbox" id="filter-high" checked /> <span class="badge high">HIGH</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" id="filter-medium" checked /> <span class="badge medium">MEDIUM</span>
+      </label>
+      <label class="filter-check">
+        <input type="checkbox" id="filter-low" checked /> <span class="badge low">LOW</span>
+      </label>
+    </div>
+
+    <div class="sidebar-footer">
+      <span class="status-dot" id="api-status-dot"></span>
+      <span id="api-status-text">Connecting…</span>
+    </div>
+  </aside>
+
+  <!-- ── Main content ─────────────────────────────────────────────────── -->
+  <main class="main">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger">☰</button>
+        <h1 class="page-title" id="page-title">Dashboard Overview</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="search-wrap">
+          <input id="search-input" type="text" class="search-input" placeholder="🔍  Search attack type…" />
+        </div>
+        <div class="topbar-time" id="clock">--:--:--</div>
+        <button class="btn-icon" id="sound-btn" title="Toggle sound alerts">🔔</button>
+        <button class="btn-danger-sm" id="clear-btn" title="Clear all alerts">🗑 Clear</button>
+        <button class="btn-primary" id="refresh-btn">↻ Refresh</button>
+      </div>
+    </header>
+
+    <!-- ────── DASHBOARD TAB ────── -->
+    <section class="tab-pane active" id="tab-dashboard">
+      <!-- KPI cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card glow-red" id="kpi-card-high">
+          <div class="kpi-icon">🔴</div>
+          <p class="kpi-label">HIGH Alerts</p>
+          <p class="kpi-value" id="kpi-high">—</p>
+          <p class="kpi-sub">Immediate action</p>
+        </div>
+        <div class="kpi-card glow-orange" id="kpi-card-medium">
+          <div class="kpi-icon">🟠</div>
+          <p class="kpi-label">MEDIUM Alerts</p>
+          <p class="kpi-value" id="kpi-medium">—</p>
+          <p class="kpi-sub">Investigate</p>
+        </div>
+        <div class="kpi-card glow-green" id="kpi-card-low">
+          <div class="kpi-icon">🟢</div>
+          <p class="kpi-label">LOW / Benign</p>
+          <p class="kpi-value" id="kpi-low">—</p>
+          <p class="kpi-sub">Logged only</p>
+        </div>
+        <div class="kpi-card glow-blue" id="kpi-card-total">
+          <div class="kpi-icon">📋</div>
+          <p class="kpi-label">Total Alerts</p>
+          <p class="kpi-value" id="kpi-total">—</p>
+          <p class="kpi-sub">All time</p>
+        </div>
+        <div class="kpi-card glow-purple" id="kpi-card-fpr">
+          <div class="kpi-icon">⚠️</div>
+          <p class="kpi-label">FPR Estimate</p>
+          <p class="kpi-value" id="kpi-fpr">—</p>
+          <p class="kpi-sub">False positive rate</p>
+        </div>
+        <div class="kpi-card glow-cyan" id="kpi-card-prec">
+          <div class="kpi-icon">🎯</div>
+          <p class="kpi-label">Precision Est.</p>
+          <p class="kpi-value" id="kpi-prec">—</p>
+          <p class="kpi-sub">Attack accuracy</p>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <h2 class="chart-title">Attack Distribution</h2>
+          <div class="chart-wrap">
+            <canvas id="chart-donut"></canvas>
+          </div>
+        </div>
+        <div class="chart-card chart-card--wide">
+          <h2 class="chart-title">Alert Timeline (last 60)</h2>
+          <div class="chart-wrap">
+            <canvas id="chart-line"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent alerts -->
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">Recent Alerts</h2>
+          <button class="btn-secondary" id="export-btn">⬇ Export CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table class="alert-table" id="recent-table">
+            <thead>
+              <tr>
+                <th>Time</th><th>Attack Type</th><th>Priority</th>
+                <th>Source</th><th>Confidence</th><th>Risk Score</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────── ALERTS TAB ────── -->
+    <section class="tab-pane" id="tab-alerts">
+      <div class="section-card full-height">
+        <div class="section-header">
+          <h2 class="section-title">All Alerts</h2>
+          <div class="alerts-header-controls">
+            <!-- Source filter pills -->
+            <div class="source-pills">
+              <button class="pill active" data-source="">ALL</button>
+              <button class="pill pill-sniffer" data-source="SNIFFER">📡 SNIFFER</button>
+              <button class="pill pill-upload" data-source="UPLOAD">📂 UPLOAD</button>
+              <button class="pill pill-sim" data-source="SIM">🧪 SIM</button>
+            </div>
+            <select id="filter-priority-select" class="select-control">
+              <option value="">All Priorities</option>
+              <option value="HIGH">🔴 High</option>
+              <option value="MEDIUM">🟠 Medium</option>
+              <option value="LOW">🟢 Low</option>
+            </select>
+            <button class="btn-secondary" id="alerts-export-btn">⬇ Export CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="alert-table" id="alerts-table">
+            <thead>
+              <tr>
+                <th>Time</th><th>Attack Type</th><th>Priority</th>
+                <th>Source</th><th>Confidence</th><th>Risk Score</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="alerts-tbody"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </section>
+
+    <!-- ────── LIVE MONITOR TAB ────── -->
+    <section class="tab-pane" id="tab-monitor">
+      <!-- Sniffer Control Panel -->
+      <div class="sniffer-control-panel">
+        <div class="sniffer-status-group">
+          <div class="sniffer-indicator" id="sniffer-indicator">
+            <span class="sniffer-dot" id="sniffer-dot"></span>
+            <span class="sniffer-label" id="sniffer-label">SNIFFER OFFLINE</span>
+          </div>
+          <div class="sniffer-stats">
+            <span class="sniffer-stat"><span class="sniffer-stat-label">Pkts/s</span><span class="sniffer-stat-val" id="pkt-rate">0</span></span>
+            <span class="sniffer-stat"><span class="sniffer-stat-label">Captured</span><span class="sniffer-stat-val" id="pkt-total">0</span></span>
+            <span class="sniffer-stat"><span class="sniffer-stat-label">Flows</span><span class="sniffer-stat-val" id="flows-total">0</span></span>
+          </div>
+        </div>
+        <div class="sniffer-controls">
+          <select id="iface-select" class="select-control" style="min-width:200px">
+            <option value="">Loading interfaces…</option>
+          </select>
+          <select id="interval-select" class="select-control">
+            <option value="3">Interval: 3s</option>
+            <option value="5" selected>Interval: 5s</option>
+            <option value="10">Interval: 10s</option>
+            <option value="30">Interval: 30s</option>
+          </select>
+          <button class="btn-start" id="sniffer-start-btn">▶ Start Scan</button>
+          <button class="btn-stop" id="sniffer-stop-btn" disabled>⏹ Stop Scan</button>
+        </div>
+      </div>
+
+      <div class="monitor-grid">
+        <!-- Live Traffic Feed -->
+        <div class="section-card monitor-feed">
+          <div class="section-header">
+            <h2 class="section-title">Live Real-Traffic Feed</h2>
+            <div class="status-badge live" id="live-badge">● WAITING</div>
+          </div>
+          <div class="table-wrap auto-scroll" id="monitor-scroll">
+            <table class="alert-table" id="monitor-table">
+              <thead>
+                <tr>
+                  <th>Time</th><th>Type</th><th>Priority</th>
+                  <th>Source</th><th>Src IP</th><th>Dst IP</th><th>Conf.</th><th>Risk</th>
+                </tr>
+              </thead>
+              <tbody id="monitor-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="monitor-right">
+          <!-- Real Traffic stats -->
+          <div class="section-card monitor-stats">
+            <h2 class="section-title">Source Breakdown</h2>
+            <div class="monitor-stats-grid">
+              <div class="m-stat">
+                <span class="m-stat-label">📡 Sniffed</span>
+                <span class="m-stat-val" id="monitor-sniffer-count">0</span>
+              </div>
+              <div class="m-stat">
+                <span class="m-stat-label">📂 Uploaded</span>
+                <span class="m-stat-val" id="monitor-upload-count">0</span>
+              </div>
+              <div class="m-stat">
+                <span class="m-stat-label">🧪 Simulated</span>
+                <span class="m-stat-val" id="monitor-sim-count">0</span>
+              </div>
+              <div class="m-stat">
+                <span class="m-stat-label">🎯 Predicted</span>
+                <span class="m-stat-val" id="monitor-predict-count">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Card -->
+          <div class="section-card monitor-upload">
+            <h2 class="section-title">📂 Upload Traffic CSV</h2>
+            <p class="sim-desc">Process CIC-IDS-2017 or similar network flow CSVs for instant batch analysis.</p>
+            <div class="upload-dropzone" id="upload-dropzone">
+              <div class="upload-dropzone-inner">
+                <span class="upload-icon">📄</span>
+                <p class="upload-hint">Drag &amp; Drop CSV or <strong>Click to Browse</strong></p>
+                <p class="upload-hint-small">Max size 200MB .csv</p>
+              </div>
+              <input type="file" id="upload-file-input" class="upload-file-input" accept=".csv" />
+            </div>
+            <div id="upload-file-info" class="upload-file-info hidden">
+              <span class="upload-file-icon">📄</span>
+              <span id="upload-filename">filename.csv</span>
+              <button class="upload-clear-btn" id="upload-clear-btn">×</button>
+            </div>
+            <button class="btn-primary full-width mt-1" id="upload-btn" disabled>🚀 Start Batch Processing</button>
+            <div id="upload-status" class="sim-result hidden">
+              <div class="upload-status-text" id="upload-status-text">Uploading…</div>
+              <div class="upload-progress-wrap">
+                <div class="upload-progress-bar" id="upload-progress-bar"></div>
+              </div>
+              <div class="upload-summary-grid hidden" id="upload-summary">
+                <div class="upload-summary-item"><div class="upload-summary-label">Processed</div><div class="upload-summary-val" id="upload-total">0</div></div>
+                <div class="upload-summary-item"><div class="upload-summary-label">High</div><div class="upload-summary-val" id="upload-high">0</div></div>
+                <div class="upload-summary-item"><div class="upload-summary-label">Med/Low</div><div class="upload-summary-val" id="upload-medlow">0</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────── METRICS TAB ────── -->
+    <section class="tab-pane" id="tab-metrics">
+      <div class="metrics-grid">
+        <div class="metric-block">
+          <h3 class="metric-block-title">Live SOC Metrics</h3>
+          <div id="metrics-list" class="metrics-list"></div>
+        </div>
+        <div class="metric-block">
+          <h3 class="metric-block-title">Label Distribution</h3>
+          <div class="chart-wrap chart-wrap--sm">
+            <canvas id="chart-labels"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="section-card">
+        <h2 class="chart-title">FPR Trend (last 20 polls)</h2>
+        <div class="chart-wrap">
+          <canvas id="chart-fpr"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────── SIMULATE TAB ────── -->
+    <section class="tab-pane" id="tab-simulate">
+      <div class="sim-grid">
+        <div class="section-card sim-card">
+          <h2 class="section-title">Inject Synthetic Alert</h2>
+          <p class="sim-desc">Choose an attack type and how many alerts to inject.</p>
+          <label class="form-label">Attack Type</label>
+          <select id="sim-attack-type" class="select-control full-width">
+            <option>BENIGN</option>
+            <option>DDoS</option>
+            <option>DoS GoldenEye</option>
+            <option>DoS Hulk</option>
+            <option>DoS Slowhttptest</option>
+            <option>DoS slowloris</option>
+            <option>Heartbleed</option>
+            <option>Botnet</option>
+            <option>PortScan</option>
+            <option>FTP-Patator</option>
+            <option>SSH-Patator</option>
+            <option>Web Attack – Brute Force</option>
+            <option>Web Attack – XSS</option>
+            <option>Web Attack – Sql Injection</option>
+            <option>Infiltration</option>
+          </select>
+          <label class="form-label">Count (1–100)</label>
+          <input type="number" id="sim-count" class="input-control" value="5" min="1" max="100" />
+          <button class="btn-primary full-width mt-1" id="sim-inject-btn">⚡ Inject Alerts</button>
+          <div id="sim-result" class="sim-result hidden"></div>
+        </div>
+
+        <div class="section-card sim-card">
+          <h2 class="section-title">Flood with Random Traffic</h2>
+          <p class="sim-desc">Inject a random mix of all attack types to stress-test the dashboard.</p>
+          <label class="form-label">Count (1–50)</label>
+          <input type="number" id="flood-count" class="input-control" value="20" min="1" max="50" />
+          <button class="btn-danger full-width mt-1" id="flood-btn">🌊 Random Flood</button>
+          <div id="flood-result" class="sim-result hidden"></div>
+        </div>
+
+        <div class="section-card sim-card">
+          <h2 class="section-title">Auto-Simulate</h2>
+          <p class="sim-desc">Continuously inject random alerts every N seconds to see live updates.</p>
+          <label class="form-label">Interval (seconds)</label>
+          <input type="number" id="auto-interval" class="input-control" value="5" min="1" max="60" />
+          <button class="btn-primary full-width mt-1" id="auto-start-btn">▶️ Start Auto-Simulate</button>
+          <button class="btn-secondary full-width mt-1" id="auto-stop-btn" disabled>⏹ Stop</button>
+          <div id="auto-status" class="sim-result hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────── ANALYTICS TAB ────── -->
+    <section class="tab-pane" id="tab-analytics">
+
+      <!-- Header Row -->
+      <div class="analytics-header">
+        <div>
+          <h2 class="section-title">🧬 Model Performance Analytics</h2>
+          <p class="analytics-subtitle">Compare Rule-Based Baseline vs ML Classifiers on real held-out test data</p>
+        </div>
+        <div class="analytics-controls">
+          <button class="btn-primary" id="run-comparison-btn">⚙️ Run Comparison</button>
+          <span class="analytics-status-txt" id="analytics-status-txt"></span>
+        </div>
+      </div>
+
+      <!-- Model selector pills -->
+      <div class="model-tabs" id="model-tabs"></div>
+
+      <!-- KPI overview for selected model -->
+      <div class="kpi-grid" id="analytics-kpi-grid" style="margin-bottom:20px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))"></div>
+
+      <!-- Charts row 1: Confusion Matrix + ROC -->
+      <div class="analytics-charts-row">
+        <div class="chart-card analytics-cm-card">
+          <h3 class="chart-title">Confusion Matrix</h3>
+          <div id="cm-container" class="cm-container"></div>
+        </div>
+        <div class="chart-card" style="flex:1;min-width:0">
+          <h3 class="chart-title">ROC Curve — Attack Detection</h3>
+          <div class="chart-wrap" style="height:280px">
+            <canvas id="chart-roc"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts row 2: P/R/F1 + FP comparison -->
+      <div class="analytics-charts-row" style="margin-top:16px">
+        <div class="chart-card" style="flex:1;min-width:0">
+          <h3 class="chart-title">Precision / Recall / F1-Score (Macro)</h3>
+          <div class="chart-wrap" style="height:260px">
+            <canvas id="chart-prf"></canvas>
+          </div>
+        </div>
+        <div class="chart-card" style="flex:1;min-width:0">
+          <h3 class="chart-title">False Positive Rate — All Models</h3>
+          <div class="chart-wrap" style="height:260px">
+            <canvas id="chart-fpr-compare"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Business Impact -->
+      <div class="section-card" style="margin-top:16px">
+        <h3 class="chart-title">📊 Business Impact vs Rule-Based Baseline</h3>
+        <div id="business-impact-grid" class="business-grid"></div>
+      </div>
+
+      <!-- Per-class table -->
+      <div class="section-card" style="margin-top:16px;margin-bottom:24px">
+        <h3 class="chart-title">Per-Class Performance (Selected Model)</h3>
+        <div class="table-wrap" style="max-height:340px">
+          <table class="alert-table" id="per-class-table">
+            <thead>
+              <tr>
+                <th>Class</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>Support</th>
+              </tr>
+            </thead>
+            <tbody id="per-class-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
